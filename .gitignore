@@ -1,0 +1,58 @@
+# Directorios de Python y archivos de compilación
+# Excluye archivos generados por Python, como cachés y compilaciones.
+__pycache__/
+*.py[cod]
+.Python
+.tox/
+.env
+*.env
+*.so
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Entornos Virtuales
+# Ignora los directorios de entornos virtuales para evitar que se suban al repositorio.
+venv/
+env/
+
+# Directorios de Empaquetado y Distribución
+# Excluye archivos generados al empaquetar o distribuir el proyecto.
+dist/
+build/
+*.egg-info/
+*.egg
+
+# Control de Versiones y Experimentación (DVC)
+# Ignora los archivos de caché de DVC y otros artefactos de experimentación.
+.dvc/
+.dvc/cache/
+*.dvc
+.vscode/dvc-cache/
+tensorboard/
+mlruns/
+dvc.lock
+.env
+
+# Directorios de Datos y Artefactos (¡CRUCIAL!)
+# Este es el punto más importante para un proyecto de ciencia de datos.
+# Evita subir archivos de datos brutos, modelos entrenados o informes.
+# Los datos se gestionan mejor con DVC y los modelos y reportes con git-lfs o DVC.
+data/
+models/
+reports/
+
+# Notebooks y Archivos de Herramientas
+# Excluye los puntos de control de los notebooks y otros archivos de configuración.
+.ipynb_checkpoints/
+.vscode/
+.idea/
+.spyproject/
+.DS_Store
+
+# Archivos de Registro y Salida
+# Ignora archivos de log y otros archivos de salida generados.
+*.log
+*.sqlite
+.output.txt

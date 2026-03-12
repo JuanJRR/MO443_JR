@@ -1,0 +1,53 @@
+version: 2
+updates:
+  # Habilita las actualizaciones para el entorno de desarrollo de Dev Containers.
+  - package-ecosystem: "devcontainers"
+    # Busca en el directorio raíz o en cualquier subdirectorio .devcontainer.
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Crea PRs con la etiqueta "devcontainer" y asigna un revisor.
+    labels:
+      - "dependabot"
+      - "devcontainer"
+    reviewers:
+      - "JuanJRR" # Cambia por tu usuario de GitHub.
+
+  # Habilita las actualizaciones para las dependencias de Python.
+  - package-ecosystem: "pip"
+    # Especifica el directorio donde se encuentra el archivo requirements.txt.
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    # Agrupa las actualizaciones de versiones menores para reducir el ruido.
+    groups:
+      minor-updates:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+    # Ignora las actualizaciones de librerías específicas que pueden romper el proyecto.
+    ignore:
+      - dependency-name: "tensorflow"
+        versions: ["<2.16.0"]
+      - dependency-name: "pytorch"
+        versions: ["<2.2.0"]
+    # Limita el número de PRs abiertos para evitar la sobrecarga.
+    open-pull-requests-limit: 10
+    labels:
+      - "dependabot"
+      - "python"
+    reviewers:
+      - "JuanJRR" # Cambia por tu usuario de GitHub.
+
+  # Habilita las actualizaciones para las acciones de GitHub.
+  - package-ecosystem: "github-actions"
+    # Busca en el directorio donde se encuentran los workflows de GitHub Actions.
+    directory: "/"
+    schedule:
+      interval: "weekly"
+    labels:
+      - "dependabot"
+      - "github-actions"
+    reviewers:
+      - "JuanJRR" # Cambia por tu usuario de GitHub.
