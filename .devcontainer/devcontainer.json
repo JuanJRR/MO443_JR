@@ -6,32 +6,23 @@
     "service": "development",
 
     "workspaceFolder": "/app",
-
     "customizations": {
         "vscode": {
+            "userPortability": {
+                "extensions": false
+            },
             "extensions": [
-                "streetsidesoftware.code-spell-checker",
-                "streetsidesoftware.code-spell-checker-spanish",
-                "eamodio.gitlens",
                 "ms-python.python",
                 "ms-python.vscode-pylance",
                 "ms-toolsai.jupyter",
                 "ms-toolsai.datawrangler",
                 "njpwerner.autodocstring",
-                "redhat.vscode-yaml",
-                "charliermarsh.ruff",
-                "ms-toolsai.tensorboard",
-                "ms-azuretools.vscode-docker",
-                "bierner.markdown-mermaid",
-                "DavidAnson.vscode-markdownlint"
+                "charliermarsh.ruff"
             ],
             "settings": {
-                "python.defaultInterpreterPath": "/usr/bin/python3",
+                "python.defaultInterpreterPath": "/usr/bin/python",
                 "python.analysis.extraPaths": ["/app/src"]
             }
         }
-    },
-    // En desarrollo es más sencillo para acceder a /dev/bus/usb
-    "remoteUser": "root", 
-    "runArgs": ["--gpus", "all"]
+    }
 }

@@ -1,0 +1,21 @@
+# Control de versiones
+.git
+.gitignore
+
+# Entornos virtuales y Python
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+build/
+dist/
+*.egg-info/
+
+# Configuración de IDEs
+.vscode/
+.idea/
+
+# Datos temporales y logs
+*.log
+.ipynb_checkpoints/

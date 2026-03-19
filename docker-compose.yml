@@ -5,23 +5,14 @@ services:
       dockerfile: Dockerfile
     volumes:
       - .:/app
-      - /dev/bus/usb:/dev/bus/usb
-    # Aumentamos la memoria compartida para Deep Learning
-    shm_size: '4gb' 
-    ports:
-      - "8888:8888"
-      - "6006:6006" # Tensorboard
+    shm_size: '4gb'
     stdin_open: true
     tty: true
-    env_file:
-      - .env
     deploy:
       resources:
         reservations:
-          devices:
-            - driver: nvidia
-              count: all
-              capabilities: [gpu, compute, utility, video]
-        # Recomendación: Relajar los límites para DL
+          cpus: "2"
+          memory: 2G
         limits:
-          memory: 12G
+          memory: 8G
+          cpus: "4"

@@ -9,8 +9,6 @@ authors = [
 license = {file = "LICENSE"}
 keywords = ["data-science", "machine-learning"]
 dependencies = [
-    "python-dotenv>=1.2.0",
-    "tqdm>=4.67.0",
     "numpy>=2.0.2", 
     "pandas>=2.2.2",
     "scipy>=1.16.3",
@@ -23,8 +21,7 @@ dependencies = [
 [project.optional-dependencies]
 dev = [
     "ruff>=0.15.5",
-    "pytest>=9.0.2",
-    "ipykernel>=7.2.0", 
+    "ipykernel>=7.2.0"
 ]
 
 [tool.ruff]
