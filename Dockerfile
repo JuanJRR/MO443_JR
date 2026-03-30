@@ -7,8 +7,8 @@ LABEL maintainer="Juan Jose Rodriguez <rodriguezjuan001@outlook.com>"
 ENV TZ=America/Sao_Paulo \
     DEBIAN_FRONTEND=noninteractive \
     PYTHONUNBUFFERED=1 \
-    PYTHONPATH=/app/src 
-
+    PYTHONPATH=/app
+    
 # 3. Instalación de dependencias del sistema en una sola capa
 RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \

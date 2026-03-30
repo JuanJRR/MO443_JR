@@ -4,7 +4,6 @@
         "../docker-compose.yml"
     ],
     "service": "development",
-
     "workspaceFolder": "/app",
     "customizations": {
         "vscode": {
@@ -20,9 +19,17 @@
                 "charliermarsh.ruff"
             ],
             "settings": {
-                "python.defaultInterpreterPath": "/usr/bin/python",
-                "python.analysis.extraPaths": ["/app/src"]
-            }
+                "python.defaultInterpreterPath": "/usr/local/bin/python",
+                "python.analysis.extraPaths": [
+                    "${workspaceFolder}"
+                ],
+                "python.autoComplete.extraPaths": [
+                    "${workspaceFolder}"
+                ]
+            },
+            "python.analysis.indexing": true,
+            "python.analysis.userSymbolsCodeLens": true,
+            "python.analysis.importFormat": "relative"
         }
     }
 }

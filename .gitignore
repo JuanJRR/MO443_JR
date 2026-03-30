@@ -39,9 +39,9 @@ dvc.lock
 # Este es el punto más importante para un proyecto de ciencia de datos.
 # Evita subir archivos de datos brutos, modelos entrenados o informes.
 # Los datos se gestionan mejor con DVC y los modelos y reportes con git-lfs o DVC.
-data/
+# data/
 models/
-reports/
+# reports/
 
 # Notebooks y Archivos de Herramientas
 # Excluye los puntos de control de los notebooks y otros archivos de configuración.
@@ -56,3 +56,5 @@ reports/
 *.log
 *.sqlite
 .output.txt
+*.png
+*.jpg
