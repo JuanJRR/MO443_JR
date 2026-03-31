@@ -4,6 +4,7 @@ from src.activity_001.rotation import image_rotation, image_rotation_cv
 from src.activity_001.scaling import image_scaling, image_scaling_cv
 from src.utilities.graphics import Graphics
 from src.utilities.load_save import save_images, upload_images
+from src.activity_001.pencil_sketch import pencil_sketch, pencil_sketch_cv
 
 logger = logging.getLogger(__name__)
 
@@ -163,3 +164,85 @@ def scaling_analysis(path: str):
         del scaling_image_cv
 
     logger.info("Completion of scaling transformation")
+
+
+# imagen pencil sketch
+def pencil_sketch_analysis(path: str):
+    """Executes a comprehensive analysis of the pencil sketch effect.
+
+    This function iterates through different combinations of Gaussian kernel
+    sizes and sigma values to evaluate the 'Pencil Sketch' transformation.
+    It compares the manual implementation against the OpenCV optimized version,
+    generating visual reports that include the original image, the intermediate
+    blurred version, and the final artistic result.
+
+    Args:
+        path (str): File path to the source image to be processed.
+
+    Note:
+        - Results are organized in '/app/experiments/activity_001/results/pencil_sketch'.
+        - For each parameter set, a three-panel comparison is generated using
+          'view_comparison_mult'.
+        - The analysis demonstrate the effect of different scales
+          of blur on the sketch outlines.
+    """
+    logger.info("Start image pencil sketch transformation.")
+
+    path_save = "/app/experiments/activity_001/results/pencil_sketch"
+
+    img = upload_images(path=path, color=False)
+    views.view_simplified(
+        image=img,
+        title="Imagem Original",
+        save=True,
+        path_save=path_save,
+        name_save="original_image",
+        plot=False,
+    )
+    for kernel in [3, 11, 21]:
+        for sigma in [0.15, 0.25, 0.35, 1]:
+            transformation, blur = pencil_sketch(imagen=img, dim_k=kernel, sigma=sigma)
+
+            views.view_comparison_mult(
+                img_orig=img,
+                img_trand_1=blur,
+                img_trand_2=transformation,
+                info_trasd_1=f"Desfoque Gaussiano [$\sigma={sigma}; k={kernel}x{kernel}$] \n(Implementação)",
+                info_trasd_2="Transformação do Esboço a Lápis \n(Implementação)",
+                save=True,
+                path_save=path_save,
+                name_save=f"pencilsketch_s{sigma}_k{kernel}.png",
+                bar=True,
+                plot=False,
+            )
+
+            save_images(
+                image=transformation,
+                path=path_save,
+                name_save=f"pencilsketch_s{sigma}_k{kernel}_raw.png",
+            )
+
+            del transformation, blur
+
+            transformation, blur = pencil_sketch_cv(
+                imagen=img, dim_k=kernel, sigma=sigma
+            )
+
+            views.view_comparison_mult(
+                img_orig=img,
+                img_trand_1=blur,
+                img_trand_2=transformation,
+                info_trasd_1=f"Desfoque Gaussiano [$\sigma={sigma}; k={kernel}x{kernel}$] \n(OpenCV)",
+                info_trasd_2="Transformação do Esboço a Lápis \n(OpenCV)",
+                save=True,
+                path_save=path_save,
+                name_save=f"pencilsketch_s{sigma}_k{kernel}_cv.png",
+                bar=True,
+                plot=False,
+            )
+
+            save_images(
+                image=transformation,
+                path=path_save,
+                name_save=f"pencilsketch_s{sigma}_k{kernel}_cv_raw.png",
+            )

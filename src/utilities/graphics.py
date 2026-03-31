@@ -230,3 +230,139 @@ class Graphics:
 
         finally:
             plt.close(fig)
+
+    def view_comparison_mult(
+        self,
+        img_orig,
+        img_trand_1,
+        img_trand_2,
+        img_trand_orig: str = "Imagem original",
+        info_trasd_1: str = "Transformação",
+        info_trasd_2: str = "Transformação",
+        save: bool = False,
+        path_save: str = "/app/experiments/activity_001/results",
+        name_save: str = "original_image",
+        plot: bool = True,
+        bar: bool = False,
+    ):
+        """Displays three images side-by-side for extended comparative analysis.
+
+        This method creates a three-panel figure to compare an original image
+        against two different processed versions. It is ideal for validating
+        custom algorithms against industry-standard implementations (e.g., OpenCV).
+
+            Args:
+                img_orig (numpy.ndarray): The base or original image array.
+                img_trand_1 (numpy.ndarray): The first processed or transformed image.
+                img_trand_2 (numpy.ndarray): The second processed or transformed image.
+                img_trand_orig (str, optional): Title for the one panel. Defaults to "Imagem original".
+                info_trasd_1 (str, optional): Title for the second panel. Defaults to "Transformação".
+                info_trasd_2 (str, optional): Title for the third panel. Defaults to "Transformação".
+                save (bool, optional): Whether to export the figure to a file. Defaults to False.
+                path_save (str, optional): Directory where the image will be saved. Defaults to "/app/experiments/activity_001/results".
+                name_save (str, optional): Filename for the saved figure. Defaults to "original_image".
+                plot (bool, optional): Whether to show the plot. Defaults to True.
+                bar (bool, optional): If True, adds a unified colorbar to the
+                rightmost panel. Defaults to False.
+        """
+        try:
+            fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(12, 3.2))
+
+            im1 = ax1.imshow(  # noqa: F841
+                img_orig,
+                cmap="gray" if img_orig.ndim == 2 else "viridis",
+            )
+            ax1.set_title(
+                f"{img_trand_orig}",
+                fontsize=10,
+                fontdict={"fontstyle": "italic"},
+            )
+            ax1.tick_params(labelsize=9)
+
+            im2 = ax2.imshow(
+                img_trand_1,
+                cmap="gray" if img_trand_1.ndim == 2 else "viridis",
+            )
+            ax2.set_title(
+                f"{info_trasd_1}",
+                fontsize=10,
+                fontdict={"fontstyle": "italic"},
+            )
+            ax2.tick_params(labelsize=9)
+
+            im3 = ax3.imshow(
+                img_trand_2,
+                cmap="gray" if img_trand_2.ndim == 2 else "viridis",
+            )
+            ax3.set_title(
+                f"{info_trasd_2}",
+                fontsize=10,
+                fontdict={"fontstyle": "italic"},
+            )
+            ax3.tick_params(labelsize=9)
+
+            ax1.set_xlabel("Largo (px)")
+            ax2.set_xlabel("Largo (px)")
+            ax3.set_xlabel("Largo (px)")
+
+            ax1.set_ylabel("Longo (px)")
+            ax2.set_ylabel("Longo (px)")
+            ax3.set_ylabel("Longo (px)")
+
+            ax1.grid(
+                True,
+                color="white",
+                linestyle="-",
+                linewidth=0.5,
+                alpha=0.3,
+            )
+
+            ax2.grid(
+                True,
+                color="white",
+                linestyle="-",
+                linewidth=0.5,
+                alpha=0.3,
+            )
+
+            ax3.grid(
+                True,
+                color="white",
+                linestyle="-",
+                linewidth=0.5,
+                alpha=0.3,
+            )
+
+            if bar:
+                divider = make_axes_locatable(ax3)
+                cax = divider.append_axes("right", size="3%", pad=0.15)
+                cbar = fig.colorbar(
+                    im3,
+                    ax=[ax1, ax2, ax3],
+                    orientation="vertical",
+                    fraction=0.02,
+                    pad=0.04,
+                    cax=cax,
+                )
+                cbar.ax.tick_params(labelsize=9)
+                cbar.outline.set_visible(False)
+
+            plt.tight_layout()
+
+            if save:
+                path_save_im = os.path.join(path_save, name_save)
+                plt.savefig(
+                    path_save_im,
+                    dpi=600,
+                    bbox_inches="tight",
+                    pad_inches=0.05,
+                    transparent=False,
+                    facecolor="white",
+                )
+
+            if plot:
+                plt.show()
+
+        finally:
+            plt.close(fig)
+            pass

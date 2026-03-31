@@ -1,6 +1,10 @@
 import logging
 
-from src.activity_001.analysis import rotation_analysis, scaling_analysis
+from src.activity_001.analysis import (
+    pencil_sketch_analysis,
+    rotation_analysis,
+    scaling_analysis,
+)
 from src.utilities.logging_settings import logging_settings
 
 logging_settings(file_level=logging.INFO)
@@ -13,4 +17,5 @@ image_paths = {
 }
 
 # rotation_analysis(path=image_paths["baboon"])
-scaling_analysis(path=image_paths["baboon"])
+# scaling_analysis(path=image_paths["baboon"])
+# pencil_sketch_analysis(path=image_paths["watch"])
