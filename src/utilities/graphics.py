@@ -151,7 +151,7 @@ class Graphics:
         """
         try:
             fig, (ax1, ax2) = plt.subplots(
-                1, 2, figsize=(8, 6), gridspec_kw={"width_ratios": [1, factor]}
+                1, 2, figsize=(8, 4*factor), gridspec_kw={"width_ratios": [1, factor]}
             )
 
             im1 = ax1.imshow(  # noqa: F841
@@ -279,7 +279,7 @@ class Graphics:
             )
             ax1.tick_params(labelsize=9)
 
-            im2 = ax2.imshow(
+            im2 = ax2.imshow(  # noqa: F841
                 img_trand_1,
                 cmap="gray" if img_trand_1.ndim == 2 else "viridis",
             )

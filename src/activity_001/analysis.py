@@ -1,10 +1,11 @@
 import logging
 
+from src.activity_001.brightness_adjustment import brightness_adjustment
+from src.activity_001.pencil_sketch import pencil_sketch, pencil_sketch_cv
 from src.activity_001.rotation import image_rotation, image_rotation_cv
 from src.activity_001.scaling import image_scaling, image_scaling_cv
 from src.utilities.graphics import Graphics
 from src.utilities.load_save import save_images, upload_images
-from src.activity_001.pencil_sketch import pencil_sketch, pencil_sketch_cv
 
 logger = logging.getLogger(__name__)
 
@@ -82,6 +83,7 @@ def rotation_analysis(path: str):
         del rotated_image_cv
 
     logger.info("Completion of rotation transformation")
+    del img
 
 
 # image scaling
@@ -164,6 +166,7 @@ def scaling_analysis(path: str):
         del scaling_image_cv
 
     logger.info("Completion of scaling transformation")
+    del img
 
 
 # imagen pencil sketch
@@ -211,7 +214,7 @@ def pencil_sketch_analysis(path: str):
                 info_trasd_2="Transformação do Esboço a Lápis \n(Implementação)",
                 save=True,
                 path_save=path_save,
-                name_save=f"pencilsketch_s{sigma}_k{kernel}.png",
+                name_save=f"pencilsketch_s{str(sigma).replace('.', '')}_k{kernel}",
                 bar=True,
                 plot=False,
             )
@@ -219,7 +222,7 @@ def pencil_sketch_analysis(path: str):
             save_images(
                 image=transformation,
                 path=path_save,
-                name_save=f"pencilsketch_s{sigma}_k{kernel}_raw.png",
+                name_save=f"pencilsketch_s{str(sigma).replace('.', '')}_k{kernel}_raw.png",
             )
 
             del transformation, blur
@@ -236,7 +239,7 @@ def pencil_sketch_analysis(path: str):
                 info_trasd_2="Transformação do Esboço a Lápis \n(OpenCV)",
                 save=True,
                 path_save=path_save,
-                name_save=f"pencilsketch_s{sigma}_k{kernel}_cv.png",
+                name_save=f"pencilsketch_s{str(sigma).replace('.', '')}_k{kernel}_cv",
                 bar=True,
                 plot=False,
             )
@@ -244,5 +247,96 @@ def pencil_sketch_analysis(path: str):
             save_images(
                 image=transformation,
                 path=path_save,
-                name_save=f"pencilsketch_s{sigma}_k{kernel}_cv_raw.png",
+                name_save=f"pencilsketch_s{str(sigma).replace('.', '')}_k{kernel}_cv_raw.png",
             )
+
+    logger.info("Completion of pencil sketch transformation")
+    del img
+
+
+# brightness adjustment
+def brightness_adjustment_analysis(path: str):
+    """Executes a systematic analysis of non-linear brightness adjustments.
+
+    This function evaluates the Gamma Correction (Power Law Transformation)
+    by applying a range of gamma values to a source image. It generates
+    individual reports for each gamma value and composite multi-panel
+    comparisons to study the effect of the '1/gamma' exponent on image
+    luminosity and contrast.
+
+    Args:
+        path (str): File path to the source image to be analyzed.
+
+    Note:
+        - Results are stored in '/app/experiments/activity_001/results/brightness'.
+        - Tested gamma values: [1.5, 2.5, 3.5, 5.5].
+        - Uses 'view_comparison' for individual results and 'view_comparison_mult'
+          for grouped comparisons.
+    """
+    logger.info("Start image brightness adjustment transformation.")
+
+    path_save = "/app/experiments/activity_001/results/brightness_adjustment"
+
+    img = upload_images(path=path, color=False)
+    views.view_simplified(
+        image=img,
+        title="Imagem Original",
+        save=True,
+        path_save=path_save,
+        name_save="original_image",
+        plot=False,
+    )
+
+    transformations = []
+    for gamma in [1.5, 2.5, 3.5, 5.5]:
+        transformation = brightness_adjustment(imagen=img, gamma=gamma)
+        transformations.append(transformation)
+
+        views.view_comparison(
+            img_orig=img,
+            img_trand=transformation,
+            info_trasd=f"Brightness Adjustment ($\gamma = {gamma}$)",
+            save=True,
+            path_save=path_save,
+            name_save=f"brightness_adjustment_g{str(gamma).replace('.', '')}",
+            plot=False,
+            bar=True,
+        )
+
+        save_images(
+            image=transformation,
+            path=path_save,
+            name_save=f"brightness_adjustment_g{str(gamma).replace('.', '')}_raw.png",
+        )
+
+        del transformation
+
+    views.view_comparison_mult(
+        img_orig=img,
+        img_trand_1=transformations[0],
+        img_trand_2=transformations[1],
+        info_trasd_1="Brightness Adjustment ($\gamma = 1.5$)",
+        info_trasd_2="Brightness Adjustment ($\gamma = 2.5$)",
+        save=True,
+        path_save=path_save,
+        name_save="brightness_adjustment_com1",
+        bar=True,
+        plot=True,
+    )
+
+    views.view_comparison_mult(
+        img_orig=img,
+        img_trand_1=transformations[2],
+        img_trand_2=transformations[3],
+        info_trasd_1="Brightness Adjustment ($\gamma = 3.5$)",
+        info_trasd_2="Brightness Adjustment ($\gamma = 5.5$)",
+        save=True,
+        path_save=path_save,
+        name_save="brightness_adjustment_com2",
+        bar=True,
+        plot=True,
+    )
+
+    logger.info("Completion of brightness adjustment transformation")
+
+    del transformations, img

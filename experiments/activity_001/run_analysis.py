@@ -4,6 +4,7 @@ from src.activity_001.analysis import (
     pencil_sketch_analysis,
     rotation_analysis,
     scaling_analysis,
+    brightness_adjustment_analysis
 )
 from src.utilities.logging_settings import logging_settings
 
@@ -19,3 +20,4 @@ image_paths = {
 # rotation_analysis(path=image_paths["baboon"])
 # scaling_analysis(path=image_paths["baboon"])
 # pencil_sketch_analysis(path=image_paths["watch"])
+brightness_adjustment_analysis(path=image_paths["baboon"])
