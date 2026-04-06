@@ -1,5 +1,6 @@
 import logging
 
+from src.activity_001.binarization_threshold import binarization_threshold
 from src.activity_001.brightness_adjustment import brightness_adjustment
 from src.activity_001.pencil_sketch import pencil_sketch, pencil_sketch_cv
 from src.activity_001.rotation import image_rotation, image_rotation_cv
@@ -82,8 +83,8 @@ def rotation_analysis(path: str):
 
         del rotated_image_cv
 
+    del img, path_save
     logger.info("Completion of rotation transformation")
-    del img
 
 
 # image scaling
@@ -165,8 +166,8 @@ def scaling_analysis(path: str):
 
         del scaling_image_cv
 
+    del img, path_save
     logger.info("Completion of scaling transformation")
-    del img
 
 
 # imagen pencil sketch
@@ -250,8 +251,8 @@ def pencil_sketch_analysis(path: str):
                 name_save=f"pencilsketch_s{str(sigma).replace('.', '')}_k{kernel}_cv_raw.png",
             )
 
+    del img, path_save
     logger.info("Completion of pencil sketch transformation")
-    del img
 
 
 # brightness adjustment
@@ -321,7 +322,7 @@ def brightness_adjustment_analysis(path: str):
         path_save=path_save,
         name_save="brightness_adjustment_com1",
         bar=True,
-        plot=True,
+        plot=False,
     )
 
     views.view_comparison_mult(
@@ -334,9 +335,85 @@ def brightness_adjustment_analysis(path: str):
         path_save=path_save,
         name_save="brightness_adjustment_com2",
         bar=True,
-        plot=True,
+        plot=False,
     )
 
+    del transformations, img, path_save
     logger.info("Completion of brightness adjustment transformation")
 
-    del transformations, img
+
+# Binarization by threshold
+def binarization_threshold_analysis(path: str):
+    """Executes a systematic analysis of global image binarization.
+
+    This function evaluates how different global threshold levels affect the 
+    segmentation of an image into a binary (black and white) format. It 
+    iterates through a set of predefined thresholds, generates 
+    visualizations for each, and produces a final multi-panel comparison 
+    to analyze the loss of detail versus object isolation.
+
+    Args:
+        path (str): File path to the source image (grayscale) to be analyzed.
+
+    Note:
+        - Results are organized in '/app/experiments/activity_001/results/binarization_threshold'.
+        - Tested threshold levels: [64, 128, 192].
+        - Each iteration saves a raw binary image and a comparative plot 
+          (Original vs. Binarized).
+        - A final comparison is generated using 'view_comparison_mult' to 
+          display the results of all three thresholds side-by-side.
+    """
+    logger.info("Start image binarization by threshold transformation.")
+
+    path_save = "experiments/activity_001/results/binarization_threshold"
+
+    img = upload_images(path=path, color=False)
+    views.view_simplified(
+        image=img,
+        title="Imagem Original",
+        save=True,
+        path_save=path_save,
+        name_save="original_image",
+        plot=False,
+    )
+
+    thresholds = []
+    for threshold in [64, 128, 192]:
+        transformation = binarization_threshold(imagen=img, threshold=threshold)
+        thresholds.append(transformation)
+
+        save_images(
+            image=transformation,
+            path=path_save,
+            name_save=f"binarized_image_threshold_{threshold}_raw.png",
+        )
+
+        views.view_comparison(
+            img_orig=img,
+            img_trand=transformation,
+            info_trasd=f"Imagem Binarizada ($Limiar = {threshold}$)",
+            path_save=path_save,
+            name_save=f"binarized_image_threshold_{threshold}",
+            save=True,
+            bar=False,
+            plot=False,
+        )
+
+        del transformation
+
+    views.view_comparison_mult(
+        img_orig=thresholds[0],
+        img_trand_1=thresholds[1],
+        img_trand_2=thresholds[2],
+        img_trand_orig="Imagem Binarizada ($Limiar = 64$)",
+        info_trasd_1="Imagem Binarizada ($Limiar = 128$)",
+        info_trasd_2="Imagem Binarizada ($Limiar = 192$)",
+        path_save=path_save,
+        name_save="binarized_image_threshold_comp",
+        save=True,
+        bar=True,
+        plot=False,
+    )
+
+    del thresholds, img, path_save
+    logger.info("Completion of binarization by threshold transformation")

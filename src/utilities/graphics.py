@@ -31,7 +31,7 @@ class Graphics:
                 # Typography and Labels
                 "font.family": "serif",
                 "font.sans-serif": ["Latin Modern Roman", "LM Roman 10"],
-                "axes.titlesize": 11,
+                "axes.titlesize": 10,
                 "axes.labelsize": 9,
                 "xtick.labelsize": 8,
                 "ytick.labelsize": 8,
