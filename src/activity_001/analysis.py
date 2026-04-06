@@ -1,19 +1,29 @@
 import logging
+
 import numpy as np
 
-from src.activity_001.bitplanes import bitplanes
-from src.activity_001.color_change import color_change_only_band
-from src.activity_001.color_change import color_change_operation
-from src.activity_001.color_change import color_change_filter
-from src.activity_001.mosaic import mosaics
 from src.activity_001.binarization_threshold import binarization_threshold
+from src.activity_001.bitplanes import bitplanes
 from src.activity_001.brightness_adjustment import brightness_adjustment
+from src.activity_001.color_change import (
+    color_change_filter,
+    color_change_only_band,
+    color_change_operation,
+)
+from src.activity_001.combination_images import combination_images
+from src.activity_001.mosaic import mosaics
 from src.activity_001.pencil_sketch import pencil_sketch, pencil_sketch_cv
 from src.activity_001.rotation import image_rotation, image_rotation_cv
 from src.activity_001.scaling import image_scaling, image_scaling_cv
+from src.activity_001.various_transformations import (
+    intensity_rescaling,
+    inverted_even_lines,
+    reflection_upper_half,
+    reverse,
+    vertical_reflection,
+)
 from src.utilities.graphics import Graphics
 from src.utilities.load_save import save_images, upload_images
-from src.activity_001.combination_images import combination_images
 
 logger = logging.getLogger(__name__)
 
@@ -765,3 +775,146 @@ def combination_images_analysis(path_a: str, path_b: str):
 
     del transformation, img_a, img_b
     logger.info("Completion of combination images transformation")
+
+
+# Various transformations
+def various_transformations_analysis(path:str):
+    """Executes a comprehensive experimental suite of image transformations.
+
+    This function applies a sequence of spatial and intensity-based 
+    transformations to a single source image. It automates the process of 
+    image loading, individual transformation execution, raw data 
+    persistence, and the creation of comparative visualizations for 
+    qualitative assessment.
+
+    Args:
+        path (str): File path to the source image to be analyzed.
+
+    Note:
+        - Results are organized in 'experiments/activity_001/results/various'.
+        - Transformations included:
+            1. Photographic Negative (reverse).
+            2. Intensity Rescaling (100-200 range).
+            3. Horizontal flip of even-indexed lines.
+            4. Vertical reflection of the upper half.
+            5. Full vertical reflection (upside down).
+    """
+    logger.info("Start image various transformation.")
+
+    path_save = "experiments/activity_001/results/various_transformations"
+
+    img = upload_images(path=path, color=False)
+    views.view_simplified(
+        image=img,
+        title="Imagem Original",
+        save=True,
+        path_save=path_save,
+        name_save="original_image",
+        plot=False,
+    )
+
+    # negativo da imagem
+    transformation = reverse(imagen=img)
+    save_images(
+        image=transformation,
+        path=path_save,
+        name_save="reverse_imagen_raw.png",
+    )
+
+    views.view_comparison(
+        img_orig=img,
+        img_trand=transformation,
+        info_trasd="Transformação de Negativo",
+        path_save=path_save,
+        name_save="reverse_imagen_comp",
+        save=True,
+        bar=False,
+        plot=False,
+    )
+
+    del transformation
+
+    # imagem transformada
+    transformation = intensity_rescaling(imagen=img)
+    save_images(
+        image=transformation,
+        path=path_save,
+        name_save="intensity_rescaling_raw.png",
+    )
+
+    views.view_comparison(
+        img_orig=img,
+        img_trand=transformation,
+        info_trasd="Transformação de Redimensionamento \nde intensidade",
+        path_save=path_save,
+        name_save="intensity_rescaling_comp",
+        save=True,
+        bar=False,
+        plot=False,
+    )
+
+    del transformation
+
+    # linhas pares invertidas
+    transformation = inverted_even_lines(imagen=img)
+    save_images(
+        image=transformation,
+        path=path_save,
+        name_save="inverted_evenlines_raw.png",
+    )
+
+    views.view_comparison(
+        img_orig=img,
+        img_trand=transformation,
+        info_trasd="Transformação de Linhas Pares Invertidas",
+        path_save=path_save,
+        name_save="cinverted_evenlines_comp",
+        save=True,
+        bar=False,
+        plot=False,
+    )
+
+    del transformation
+
+    # reflexão de linhas
+    transformation = reflection_upper_half(imagen=img)
+
+    save_images(
+        image=transformation,
+        path=path_save,
+        name_save="reflection_upperhalf_raw.png",
+    )
+
+    views.view_comparison(
+        img_orig=img,
+        img_trand=transformation,
+        info_trasd="Transformação de Super Meia Reflexão",
+        path_save=path_save,
+        name_save="reflection_upperhalf_comp",
+        save=True,
+        bar=False,
+        plot=False,
+    )
+
+    del transformation
+    
+    # espelhamento vertical
+    transformation = vertical_reflection(imagen=img)
+    save_images(
+        image=transformation,
+        path=path_save,
+        name_save="vertical_reflection_raw.png",
+    )
+
+    views.view_comparison(
+        img_orig=img,
+        img_trand=transformation,
+        info_trasd="Transformação de Reflexão Vertical",
+        path_save=path_save,
+        name_save="vertical_reflection_comp",
+        save=True,
+        bar=False,
+        plot=False,
+    )
+
+    del transformation
