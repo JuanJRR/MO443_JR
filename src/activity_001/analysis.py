@@ -1,6 +1,7 @@
 import logging
 import numpy as np
 
+from src.activity_001.bitplanes import bitplanes
 from src.activity_001.color_change import color_change_only_band
 from src.activity_001.color_change import color_change_operation
 from src.activity_001.color_change import color_change_filter
@@ -637,3 +638,72 @@ def color_change_onlyband_analysis(path: str):
 
     del transformation, img
     logger.info("Completion of color change only band transformation")
+
+
+# bitplanes
+def bitplanes_analysis(path: str):
+    """Executes a systematic decomposition and visual analysis of image bit-planes.
+
+    This function loads a grayscale image and decomposes it into its 8
+    constituent bit-planes (from bit 0 to bit 7). It automates the storage
+    of each individual binary mask and generates composite visualizations
+    to compare the informational value of Least Significant Bits (LSB)
+    versus Most Significant Bits (MSB).
+
+    Args:
+        path (str): File path to the source image (grayscale) to be analyzed.
+
+    Note:
+        - Results are organized in 'experiments/activity_001/results/bitplanes'.
+        - Saves 8 raw binary images named 'bitplanes_{0-7}_raw.png'.
+    """
+    logger.info("Start image bitplanes transformation.")
+
+    path_save = "experiments/activity_001/results/bitplanes"
+
+    img = upload_images(path=path, color=False)
+    views.view_simplified(
+        image=img,
+        title="Imagem Original",
+        save=True,
+        path_save=path_save,
+        name_save="original_image",
+        plot=False,
+    )
+
+    transformations = bitplanes(imagen=img)
+
+    for bit, transformation in enumerate(transformations):
+        save_images(
+            image=transformation,
+            path=path_save,
+            name_save=f"bitplanes_{bit}_raw.png",
+        )
+
+    views.view_comparison_mult(
+        img_orig=img,
+        img_trand_1=transformations[0],
+        img_trand_2=transformations[4],
+        info_trasd_1=f"Plano de bits {0}",
+        info_trasd_2=f"Plano de bits {4}",
+        path_save=path_save,
+        name_save="bitplanes_04_comp",
+        save=True,
+        bar=False,
+        plot=False,
+    )
+    views.view_comparison_mult(
+        img_orig=img,
+        img_trand_1=transformations[4],
+        img_trand_2=transformations[7],
+        info_trasd_1=f"Plano de bits {4}",
+        info_trasd_2=f"Plano de bits {7}",
+        path_save=path_save,
+        name_save="bitplanes_47_comp",
+        save=True,
+        bar=False,
+        plot=False,
+    )
+
+    del transformations, img
+    logger.info("Completion of bitplanes transformation")

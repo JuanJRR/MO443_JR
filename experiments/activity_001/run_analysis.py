@@ -9,7 +9,8 @@ from src.activity_001.analysis import (
     scaling_analysis,
     color_change_filter_analysis,
     color_change_operation_analysis,
-    color_change_onlyband_analysis
+    color_change_onlyband_analysis,
+    bitplanes_analysis
 )
 from src.utilities.logging_settings import logging_settings
 
@@ -30,4 +31,5 @@ image_paths = {
 # mosaics_analysis(path=image_paths["baboon"])
 # color_change_filter_analysis(path=image_paths["watch"])
 # color_change_operation_analysis(path=image_paths["watch"])
-color_change_onlyband_analysis(path=image_paths["watch"])
+# color_change_onlyband_analysis(path=image_paths["watch"])
+bitplanes_analysis(path=image_paths["baboon"])
