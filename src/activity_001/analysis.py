@@ -1,5 +1,10 @@
 import logging
+import numpy as np
 
+from src.activity_001.color_change import color_change_only_band
+from src.activity_001.color_change import color_change_operation
+from src.activity_001.color_change import color_change_filter
+from src.activity_001.mosaic import mosaics
 from src.activity_001.binarization_threshold import binarization_threshold
 from src.activity_001.brightness_adjustment import brightness_adjustment
 from src.activity_001.pencil_sketch import pencil_sketch, pencil_sketch_cv
@@ -346,10 +351,10 @@ def brightness_adjustment_analysis(path: str):
 def binarization_threshold_analysis(path: str):
     """Executes a systematic analysis of global image binarization.
 
-    This function evaluates how different global threshold levels affect the 
-    segmentation of an image into a binary (black and white) format. It 
-    iterates through a set of predefined thresholds, generates 
-    visualizations for each, and produces a final multi-panel comparison 
+    This function evaluates how different global threshold levels affect the
+    segmentation of an image into a binary (black and white) format. It
+    iterates through a set of predefined thresholds, generates
+    visualizations for each, and produces a final multi-panel comparison
     to analyze the loss of detail versus object isolation.
 
     Args:
@@ -358,9 +363,9 @@ def binarization_threshold_analysis(path: str):
     Note:
         - Results are organized in '/app/experiments/activity_001/results/binarization_threshold'.
         - Tested threshold levels: [64, 128, 192].
-        - Each iteration saves a raw binary image and a comparative plot 
+        - Each iteration saves a raw binary image and a comparative plot
           (Original vs. Binarized).
-        - A final comparison is generated using 'view_comparison_mult' to 
+        - A final comparison is generated using 'view_comparison_mult' to
           display the results of all three thresholds side-by-side.
     """
     logger.info("Start image binarization by threshold transformation.")
@@ -417,3 +422,218 @@ def binarization_threshold_analysis(path: str):
 
     del thresholds, img, path_save
     logger.info("Completion of binarization by threshold transformation")
+
+
+# mosaics
+def mosaics_analysis(path: str):
+    """Executes an experimental analysis of image mosaicing and block rearrangement.
+
+    This function divides the target image into a 3x3 grid (9 blocks) and
+    applies a predefined pseudo-random rearrangement. It validates the
+    logic of spatial indexing and block-based reconstruction.
+
+    Args:
+        path (str): File path to the source image (supports RGB or Grayscale).
+
+    Note:
+        - Results are stored in 'experiments/activity_001/results/mosaic'.
+    """
+    logger.info("Start image mosaics transformation.")
+
+    path_save = "experiments/activity_001/results/mosaics"
+
+    img = upload_images(path=path, color=False)
+    views.view_simplified(
+        image=img,
+        title="Imagem Original",
+        save=True,
+        path_save=path_save,
+        name_save="original_image",
+        plot=False,
+    )
+
+    new_mosaic = np.array(
+        [
+            [6, 11, 13, 3],
+            [8, 16, 1, 9],
+            [12, 14, 2, 7],
+            [4, 15, 10, 5],
+        ]
+    )
+    new_mosaic = new_mosaic - 1
+
+    transformation = mosaics(imagen=img, n_blocks=4, new_arrangement=new_mosaic)
+
+    save_images(
+        image=transformation,
+        path=path_save,
+        name_save="mosaic_raw.png",
+    )
+
+    views.view_comparison(
+        img_orig=img,
+        img_trand=transformation,
+        info_trasd="Mosaico ($blocos=4$)",
+        path_save=path_save,
+        name_save="mosaic_comp",
+        save=True,
+        bar=False,
+        plot=False,
+    )
+
+    del transformation, img, new_mosaic
+    logger.info("Completion of mosaics transformation")
+
+
+# color change filter
+def color_change_filter_analysis(path: str):
+    """Analyzes color transformation using matrix-based filtering.
+
+    Applies a 3x3 transformation matrix (linear combination of RGB channels)
+    to the input image. This method is used to evaluate the efficiency and
+    visual output of global color filtering via 'np.matmul'.
+
+    Args:
+        path (str): File path to the input RGB image.
+
+    Note:
+        - Output directory: 'experiments/activity_001/results/color_change'.
+    """
+    logger.info("Start image color change filter transformation.")
+
+    path_save = "experiments/activity_001/results/color_change"
+
+    img = upload_images(path=path, color=True)
+    views.view_simplified(
+        image=img,
+        title="Imagem Original",
+        save=True,
+        path_save=path_save,
+        name_save="original_image",
+        plot=False,
+    )
+
+    transformation = color_change_filter(imagen=img)
+
+    save_images(
+        image=transformation,
+        path=path_save,
+        name_save="color_change_filter_raw.png",
+    )
+
+    views.view_comparison(
+        img_orig=img,
+        img_trand=transformation,
+        info_trasd="Transformação de cores",
+        path_save=path_save,
+        name_save="color_change_filter_comp",
+        save=True,
+        bar=False,
+        plot=False,
+    )
+
+    del transformation, img
+    logger.info("Completion of color change filter transformation")
+
+
+# color change operation
+def color_change_operation_analysis(path: str):
+    """Evaluates color transformation through manual channel-wise arithmetic.
+
+    This analysis applies the same color weights as the filter version but
+    processes each RGB channel (Red, Green, Blue) explicitly. It is used
+    to verify mathematical consistency between matrix operations and
+    standard arithmetic.
+
+    Args:
+        path (str): File path to the input RGB image.
+
+    Note:
+        - Output directory: 'experiments/activity_001/results/color_change'.
+    """
+    logger.info("Start image color change operation transformation.")
+
+    path_save = "experiments/activity_001/results/color_change"
+
+    img = upload_images(path=path, color=True)
+    views.view_simplified(
+        image=img,
+        title="Imagem Original",
+        save=True,
+        path_save=path_save,
+        name_save="original_image",
+        plot=False,
+    )
+
+    transformation = color_change_operation(imagen=img)
+
+    save_images(
+        image=transformation,
+        path=path_save,
+        name_save="color_change_operation_raw.png",
+    )
+
+    views.view_comparison(
+        img_orig=img,
+        img_trand=transformation,
+        info_trasd="Transformação de cores",
+        path_save=path_save,
+        name_save="color_change_operation_comp",
+        save=True,
+        bar=False,
+        plot=False,
+    )
+
+    del transformation, img
+    logger.info("Completion of color change operation transformation")
+
+
+# color change only band
+def color_change_onlyband_analysis(path: str):
+    """Analyzes the conversion of an RGB image to a single-channel grayscale band.
+
+    Uses a weighted average of RGB channels based on human luminance perception
+    (Y' = 0.2989R + 0.5870G + 0.1140B). The analysis explores the
+    transformation of 3D color data into a 2D intensity map.
+
+    Args:
+        path (str): File path to the input RGB image.
+
+    Note:
+        - Output directory: 'experiments/activity_001/results/color_change'.
+    """
+    logger.info("Start image color change only band transformation.")
+
+    path_save = "experiments/activity_001/results/color_change"
+
+    img = upload_images(path=path, color=True)
+    views.view_simplified(
+        image=img,
+        title="Imagem Original",
+        save=True,
+        path_save=path_save,
+        name_save="original_image",
+        plot=False,
+    )
+
+    transformation = color_change_only_band(imagen=img)
+
+    save_images(
+        image=transformation,
+        path=path_save,
+        name_save="color_change_onlyband_raw.png",
+    )
+
+    views.view_comparison(
+        img_orig=img,
+        img_trand=transformation,
+        info_trasd="Transformação de cores",
+        path_save=path_save,
+        name_save="color_change_onlyband_comp",
+        save=True,
+        bar=False,
+        plot=False,
+    )
+
+    del transformation, img
+    logger.info("Completion of color change only band transformation")

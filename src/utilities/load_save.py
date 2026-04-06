@@ -45,4 +45,5 @@ def save_images(image, path: str, name_save: str = "original_image.png"):
         name_save (str, optional): The name of the output file, including 
             its extension (e.g., 'result.png'). Defaults to "original_image".
     """
+    image = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
     cv2.imwrite(os.path.join(path, name_save), image)
