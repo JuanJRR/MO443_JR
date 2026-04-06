@@ -10,7 +10,8 @@ from src.activity_001.analysis import (
     color_change_filter_analysis,
     color_change_operation_analysis,
     color_change_onlyband_analysis,
-    bitplanes_analysis
+    bitplanes_analysis,
+    combination_images_analysis,
 )
 from src.utilities.logging_settings import logging_settings
 
@@ -21,6 +22,7 @@ image_paths = {
     "baboon": "/app/data/baboon_monocromatica.png",
     "watch": "/app/data/watch.png",
     "city": "/app/data/city.png",
+    "butterfly": "data/butterfly.png",
 }
 
 # rotation_analysis(path=image_paths["baboon"])
@@ -32,4 +34,7 @@ image_paths = {
 # color_change_filter_analysis(path=image_paths["watch"])
 # color_change_operation_analysis(path=image_paths["watch"])
 # color_change_onlyband_analysis(path=image_paths["watch"])
-bitplanes_analysis(path=image_paths["baboon"])
+# bitplanes_analysis(path=image_paths["baboon"])
+combination_images_analysis(
+    path_a=image_paths["baboon"], path_b=image_paths["butterfly"]
+)

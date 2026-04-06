@@ -13,6 +13,7 @@ from src.activity_001.rotation import image_rotation, image_rotation_cv
 from src.activity_001.scaling import image_scaling, image_scaling_cv
 from src.utilities.graphics import Graphics
 from src.utilities.load_save import save_images, upload_images
+from src.activity_001.combination_images import combination_images
 
 logger = logging.getLogger(__name__)
 
@@ -707,3 +708,60 @@ def bitplanes_analysis(path: str):
 
     del transformations, img
     logger.info("Completion of bitplanes transformation")
+
+
+# combination images
+def combination_images_analysis(path_a: str, path_b: str):
+    """Executes a systematic analysis of image blending through linear combination.
+
+    This function loads two grayscale images and merges them using a set of
+    predefined weight pairs [alpha_a, alpha_b]. It automates the generation
+    of raw blended images and creates triple-panel visual comparisons to
+    evaluate the influence of each source image on the final composite.
+
+    Args:
+        path_a (str): File path to the first source image (Image A).
+        path_b (str): File path to the second source image (Image B).
+
+    Note:
+        - Results are stored in 'experiments/activity_001/results/combination_images'.
+        - Tested blending factors [alpha_a, alpha_b]:
+            1. [0.2, 0.8]: High dominance of Image B.
+            2. [0.5, 0.5]: Equal contribution from both images.
+            3. [0.8, 0.2]: High dominance of Image A.
+    """
+
+    logger.info("Start image combination images transformation.")
+
+    path_save = "experiments/activity_001/results/combination_images"
+
+    img_a = upload_images(path=path_a, color=False)
+    img_b = upload_images(path=path_b, color=False)
+
+    for factor in [[0.2, 0.8], [0.5, 0.5], [0.8, 0.2]]:
+        transformation = combination_images(
+            imagen_a=img_a, imagen_b=img_b, factor=factor
+        )
+
+        save_images(
+            image=transformation,
+            path=path_save,
+            name_save=f"combination_images_{factor}_raw.png",
+        )
+
+        views.view_comparison_mult(
+            img_orig=img_a,
+            img_trand_1=img_b,
+            img_trand_2=transformation,
+            img_trand_orig="Imagem A",
+            info_trasd_1="Imagem B",
+            info_trasd_2=rf"Combinação ($\alpha_a={factor[0]}; \alpha_b={factor[1]}$)",
+            path_save=path_save,
+            name_save=f"combination_images_{factor}_comp.png",
+            save=True,
+            bar=False,
+            plot=False,
+        )
+
+    del transformation, img_a, img_b
+    logger.info("Completion of combination images transformation")
