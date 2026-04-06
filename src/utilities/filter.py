@@ -24,24 +24,24 @@ def filter(imagen, kernel: np.ndarray):
         numpy.ndarray: The filtered image as an 8-bit unsigned integer array
             (uint8), normalized to the [0, 255] range.
     """
-
-    imagen = imagen / 255.0
+    transformation = imagen.copy()
+    transformation = transformation / 255.0
 
     k_dim = kernel.shape[0]
     padding = k_dim // 2
-    is_color = imagen.ndim == 3
+    is_color = transformation.ndim == 3
 
     pad_width = (
         ((padding, padding), (padding, padding), (0, 0)) if is_color else padding
     )
 
-    img_padding = np.pad(imagen, pad_width, mode="edge")
+    img_padding = np.pad(transformation, pad_width, mode="edge")
 
     y_idx, x_idx = np.indices((k_dim, k_dim))
     y_offset = y_idx.ravel()
     x_offset = x_idx.ravel()
 
-    img_high, img_width = imagen.shape[:2]
+    img_high, img_width = transformation.shape[:2]
     rows, cols = np.indices((img_high, img_width))
 
     rows_broad = rows[None, :, :] + y_offset[:, None, None]

@@ -73,7 +73,11 @@ class Graphics:
 
         try:
             im = ax.imshow(
-                image, aspect="equal", cmap="gray" if image.ndim == 2 else "viridis"
+                image,
+                aspect="equal",
+                cmap="gray" if image.ndim == 2 else "viridis",
+                vmin=0,
+                vmax=255,
             )
 
             ax.set_title(title, pad=10, fontdict={"fontstyle": "italic"})
@@ -151,12 +155,14 @@ class Graphics:
         """
         try:
             fig, (ax1, ax2) = plt.subplots(
-                1, 2, figsize=(8, 4*factor), gridspec_kw={"width_ratios": [1, factor]}
+                1, 2, figsize=(8, 4 * factor), gridspec_kw={"width_ratios": [1, factor]}
             )
 
             im1 = ax1.imshow(  # noqa: F841
                 img_orig,
                 cmap="gray" if img_orig.ndim == 2 else "viridis",
+                vmin=0,
+                vmax=255,
             )
             ax1.set_title(
                 "Imagem original",
@@ -168,6 +174,8 @@ class Graphics:
             im2 = ax2.imshow(
                 img_trand,
                 cmap="gray" if img_trand.ndim == 2 else "viridis",
+                vmin=0,
+                vmax=255,
             )
             ax2.set_title(
                 f"{info_trasd}",
@@ -271,6 +279,8 @@ class Graphics:
             im1 = ax1.imshow(  # noqa: F841
                 img_orig,
                 cmap="gray" if img_orig.ndim == 2 else "viridis",
+                vmin=0,
+                vmax=255,
             )
             ax1.set_title(
                 f"{img_trand_orig}",
@@ -282,6 +292,8 @@ class Graphics:
             im2 = ax2.imshow(  # noqa: F841
                 img_trand_1,
                 cmap="gray" if img_trand_1.ndim == 2 else "viridis",
+                vmin=0,
+                vmax=255,
             )
             ax2.set_title(
                 f"{info_trasd_1}",
@@ -293,6 +305,8 @@ class Graphics:
             im3 = ax3.imshow(
                 img_trand_2,
                 cmap="gray" if img_trand_2.ndim == 2 else "viridis",
+                vmin=0,
+                vmax=255,
             )
             ax3.set_title(
                 f"{info_trasd_2}",

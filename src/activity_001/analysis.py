@@ -11,6 +11,7 @@ from src.activity_001.color_change import (
     color_change_operation,
 )
 from src.activity_001.combination_images import combination_images
+from src.activity_001.image_filtering import imagen_filtering
 from src.activity_001.mosaic import mosaics
 from src.activity_001.pencil_sketch import pencil_sketch, pencil_sketch_cv
 from src.activity_001.quantification import quantification
@@ -979,3 +980,59 @@ def quantification_analysis(path: str):
 
     del transformations, img
     logger.info("Completion of quantification transformation")
+
+
+# imagen_filtering
+def imagen_filtering_analysis(path: str):
+    """Executes a systematic analysis of spatial filtering using multiple kernels.
+
+    This function loads a grayscale image and applies a comprehensive suite
+    of filters (defined in the image_filtering module), including Sobel,
+    Laplacian, Gaussian, and various edge-detection operators. It automates
+     the generation of individual filtered outputs and side-by-side
+    comparisons for qualitative performance review.
+
+    Args:
+        path (str): File path to the source image (grayscale) to be filtered.
+
+    Note:
+        - Results are organized in 'experiments/activity_001/results/imagen_filtering'.
+        - Processes 12 distinct filter types (h1 through h12).
+        - h12 represents the gradient magnitude (edge strength) derived
+          from horizontal and vertical Sobel operators.
+    """
+    logger.info("Start imagen filtering transformation.")
+
+    path_save = "experiments/activity_001/results/imagen_filtering"
+
+    img = upload_images(path=path, color=False)
+    views.view_simplified(
+        image=img,
+        title="Imagem Original",
+        save=True,
+        path_save=path_save,
+        name_save="original_image",
+        plot=False,
+    )
+
+    transformations = imagen_filtering(imagen=img)
+    for id, img_filter in transformations.items():
+        save_images(
+            image=img_filter,
+            path=path_save,
+            name_save=f"imagen_filtering_{id}_raw.png",
+        )
+
+        views.view_comparison(
+            img_orig=img,
+            img_trand=img_filter,
+            info_trasd=f"Transformação de filtragem \n(kernel={id})",
+            path_save=path_save,
+            name_save=f"imagen_filtering_{id}_comp",
+            save=True,
+            bar=False,
+            plot=False,
+        )
+
+    del transformations, img
+    logger.info("Completion of imagen filtering transformation")
