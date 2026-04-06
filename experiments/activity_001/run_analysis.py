@@ -12,7 +12,8 @@ from src.activity_001.analysis import (
     color_change_onlyband_analysis,
     bitplanes_analysis,
     combination_images_analysis,
-    various_transformations_analysis
+    various_transformations_analysis,
+    quantification_analysis
 )
 from src.utilities.logging_settings import logging_settings
 
@@ -39,4 +40,5 @@ image_paths = {
 # combination_images_analysis(
 #     path_a=image_paths["baboon"], path_b=image_paths["butterfly"]
 # )
-various_transformations_analysis(path=image_paths["city"])
+# various_transformations_analysis(path=image_paths["city"])
+quantification_analysis(path=image_paths["baboon"])

@@ -13,6 +13,7 @@ from src.activity_001.color_change import (
 from src.activity_001.combination_images import combination_images
 from src.activity_001.mosaic import mosaics
 from src.activity_001.pencil_sketch import pencil_sketch, pencil_sketch_cv
+from src.activity_001.quantification import quantification
 from src.activity_001.rotation import image_rotation, image_rotation_cv
 from src.activity_001.scaling import image_scaling, image_scaling_cv
 from src.activity_001.various_transformations import (
@@ -778,13 +779,13 @@ def combination_images_analysis(path_a: str, path_b: str):
 
 
 # Various transformations
-def various_transformations_analysis(path:str):
+def various_transformations_analysis(path: str):
     """Executes a comprehensive experimental suite of image transformations.
 
-    This function applies a sequence of spatial and intensity-based 
-    transformations to a single source image. It automates the process of 
-    image loading, individual transformation execution, raw data 
-    persistence, and the creation of comparative visualizations for 
+    This function applies a sequence of spatial and intensity-based
+    transformations to a single source image. It automates the process of
+    image loading, individual transformation execution, raw data
+    persistence, and the creation of comparative visualizations for
     qualitative assessment.
 
     Args:
@@ -897,7 +898,7 @@ def various_transformations_analysis(path:str):
     )
 
     del transformation
-    
+
     # espelhamento vertical
     transformation = vertical_reflection(imagen=img)
     save_images(
@@ -917,4 +918,64 @@ def various_transformations_analysis(path:str):
         plot=False,
     )
 
-    del transformation
+    del transformation, img
+    logger.info("Completion of various transformation")
+
+
+# quantification
+def quantification_analysis(path: str):
+    """Executes a systematic analysis of image quantization across multiple levels.
+
+    This function evaluates how reducing the number of discrete intensity levels affects image quality. It iterates through various quantization levels (from 2 to 256), saves the raw results, and generates multi-panel
+    comparative visualizations to identify the threshold where visual
+    artifacts like false contouring become apparent.
+
+    Args:
+        path (str): File path to the source image (grayscale) to be analyzed.
+
+    Note:
+        - Results are stored in 'experiments/activity_001/results/quantification'.
+        - Tested levels: [2, 4, 8, 16, 32, 64, 128, 256].
+    """
+
+    logger.info("Start image quantification transformation.")
+
+    path_save = "experiments/activity_001/results/quantification"
+
+    img = upload_images(path=path, color=False)
+    views.view_simplified(
+        image=img,
+        title="Imagem Original",
+        save=True,
+        path_save=path_save,
+        name_save="original_image",
+        plot=False,
+    )
+
+    transformations = []
+    for level in [2, 4, 8, 16, 32, 64, 128, 256]:
+        transformation = quantification(imagen=img, level=level)
+        transformations.append(transformation)
+
+        save_images(
+            image=transformation,
+            path=path_save,
+            name_save=f"quantification_{level}_raw.png",
+        )
+
+    for i in range(0, len(transformations), 2):
+        views.view_comparison_mult(
+            img_orig=img,
+            img_trand_1=transformations[i],
+            img_trand_2=transformations[i + 1],
+            info_trasd_1=f"Quantificação ($Nível={2 ** (i + 1)}$)",
+            info_trasd_2=f"Quantificação ($Nível={2 ** (i + 2)}$)",
+            path_save=path_save,
+            name_save=f"quantification_{2 ** (i + 1)}{2 ** (i + 2)}_comp",
+            save=True,
+            bar=False,
+            plot=False,
+        )
+
+    del transformations, img
+    logger.info("Completion of quantification transformation")
