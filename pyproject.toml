@@ -14,7 +14,7 @@ dependencies = [
     "scipy>=1.16.3",
     "scikit-learn>=1.6.1",
     "scikit-image >=0.25.0",
-    "matplotlib>=3.10.0",
+    "matplotlib>=3.10.8",
     "opencv-python-headless>=4.13.0"
 ]
 
