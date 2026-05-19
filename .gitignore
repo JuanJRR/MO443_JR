@@ -60,3 +60,5 @@ models/
 *.jpg
 *.mp4
 *.pgm
+*.svg
+*.mpg
