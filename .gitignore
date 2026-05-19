@@ -58,3 +58,5 @@ models/
 .output.txt
 *.png
 *.jpg
+*.mp4
+*.pgm

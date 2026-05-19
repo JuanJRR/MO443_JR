@@ -1,0 +1,3 @@
+from environment_initialization import paths_report
+
+print(paths_report)
