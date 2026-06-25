@@ -50,6 +50,7 @@ models/
 .idea/
 .spyproject/
 .DS_Store
+projeto_1/
 
 # Archivos de Registro y Salida
 # Ignora archivos de log y otros archivos de salida generados.
